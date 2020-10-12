@@ -48,13 +48,14 @@ func (prods *Products) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 			http.Error(rw, "Invalid URI", http.StatusBadRequest)
 			return
 		}
-		prods.l.Println("Got id:", id)
+		prods.updateProducts(id, rw, req)
+		return 
 	}
 
 	rw.WriteHeader(http.StatusMethodNotAllowed)
 }
 
-func (p *Products) getProducts(rw http.ResponseWriter, h *http.Request) {
+func (prods *Products) getProducts(rw http.ResponseWriter, h *http.Request) {
 	lp := data.GetProducts()
 	err := lp.ToJSON(rw)
 	if err != nil {
@@ -62,13 +63,30 @@ func (p *Products) getProducts(rw http.ResponseWriter, h *http.Request) {
 	}
 }
 
-func (p *Products) addProduct(rw http.ResponseWriter, req *http.Request) {
+func (prods *Products) addProduct(rw http.ResponseWriter, req *http.Request) {
 	newProd := &data.Product{}
 	err := newProd.FromJSON(req.Body)
 	if err != nil {
 		http.Error(rw, "Unable to unmarshal json", http.StatusBadRequest)
 	}
 	data.AddProduct(newProd)
+}
+
+func (prods *Products) updateProducts(id int, rw http.ResponseWriter, req *http.Request) {
+	prod := &data.Product{}
+	err := prod.FromJSON(req.Body)
+	if err != nil {
+		http.Error(rw, "Unable to unmarshal json", http.StatusBadRequest)
+	}
+	err = data.UpdateProduct(id, prod)
+	if err == data.ErrProductNotFound {
+		http.Error(rw, "Product not found", http.StatusNotFound)
+		return
+	}
+	if err != nil {
+		http.Error(rw, "Product not found", http.StatusInternalServerError)
+		return
+	} 
 }
 
 //With marshal
