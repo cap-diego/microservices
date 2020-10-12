@@ -8,16 +8,16 @@ import (
 	"log"
 	"github.com/cap-diego/microservices/handlers"
 	"os/signal"
-	"fmt"
 )
 
 func main() {
 
 	l := log.New(os.Stdout, "product-api", log.LstdFlags)
-	hh := handlers.NewHome(l)
+	// hh := handlers.NewHome(l)
+	ph := handlers.NewProducts(l)
 
 	sm := http.NewServeMux()
-	sm.Handle("/", hh)
+	sm.Handle("/", ph)
 
 	server := &http.Server{
 		Addr: ":9090",
