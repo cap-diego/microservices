@@ -8,8 +8,14 @@ import (
 	"regexp"
 	"github.com/go-playground/validator/v10"
 )
+
 //Product defines the structure for an API
+// swagger:model
 type Product struct {
+	// the id for this product 
+	// 
+	//required: true 
+	// min: 1
 	ID			int 	`json:"id"`
 	Name		string  `json:"name" validate:"required"`
 	Desc		string  `json:"description"`
@@ -20,7 +26,7 @@ type Product struct {
 	UpdatedOn	string	`json:"-"`
 }
 
-// Validate ...
+// Validate fields on the product struct
 func (p *Product) Validate() error {
 	validate := validator.New()
 	validate.RegisterValidation("sku", validateSKU)
@@ -53,15 +59,29 @@ func (p *Product) FromJSON(r io.Reader) error {
 	return e.Decode(p)
 }
  
+// GetProducts returns a list of products
 func GetProducts() Products {
 	return productList
 }
 
+// AddProduct adds a product with p data
 func AddProduct(p *Product) {
 	p.ID = getNextID()
 	productList = append(productList, p)
 }
 
+// DeleteProduct removes a product with given id
+func DeleteProduct(id int) error {
+	_, idx, err := findProductById(id)
+
+	if err != nil {
+		return err
+	}
+	productList = append(productList[:idx], productList[idx+1:]...)
+	return nil
+}
+
+// UpdateProduct updates a product with given id
 func UpdateProduct(id int, p *Product) error {
 	_, idx, err := findProductById(id)
 
