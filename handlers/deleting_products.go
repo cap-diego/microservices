@@ -10,9 +10,11 @@ import (
 // swagger:route DELETE /products/{id} products deleteProduct
 // Deletes a product from the db
 // responses:
-//	201: noContent
+//	201: noContentResponse
+//  404: errorResponse
+//  501: errorResponse
 
-//DeleteProduct delete the product from the db 
+//DeleteProduct handles DELETE requests and removes product from the db 
 func (p *Products) DeleteProduct(rw http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, _ := strconv.Atoi(vars["id"])

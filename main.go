@@ -8,6 +8,7 @@ import (
 	"log"
 	"github.com/gorilla/mux"
 	"github.com/go-openapi/runtime/middleware"
+	"github.com/cap-diego/microservices/data"
 	"github.com/cap-diego/microservices/handlers"
 	"os/signal"
 )
@@ -15,19 +16,21 @@ import (
 func main() {
 
 	l := log.New(os.Stdout, "product-api", log.LstdFlags)
-	ph := handlers.NewProducts(l)
+	validator := data.NewValidation()
+	ph := handlers.NewProducts(l, validator)
 
 	sm := mux.NewRouter()
 
 	getRouter := sm.Methods(http.MethodGet).Subrouter()	
-	getRouter.HandleFunc("/products", ph.GetProducts)
+	getRouter.HandleFunc("/products", ph.ListAll)
+	getRouter.HandleFunc("/products/{id:[0-9]+}", ph.ListSingle)
 
 	putRouter := sm.Methods(http.MethodPut).Subrouter()
 	putRouter.HandleFunc("/{id:[0-9]+}", ph.UpdateProducts)
 	putRouter.Use(ph.MiddlewareProductValidation)
 
 	postRouter := sm.Methods(http.MethodPost).Subrouter()
-	postRouter.HandleFunc("/", ph.AddProduct)
+	postRouter.HandleFunc("/", ph.Create)
 	postRouter.Use(ph.MiddlewareProductValidation)
 
 

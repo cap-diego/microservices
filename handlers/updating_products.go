@@ -7,6 +7,15 @@ import (
 	"github.com/cap-diego/microservices/data"
 )
 
+// swagger:route PUT /products products updateProduct
+// Update a products details
+//
+// responses:
+//	201: noContentResponse
+//  404: errorResponse
+//  422: errorValidation
+
+
 // UpdateProducts http handler of put
 func (prods *Products) UpdateProducts(rw http.ResponseWriter, req *http.Request) {
 	requestVars := mux.Vars(req)

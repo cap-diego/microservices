@@ -8,6 +8,7 @@ require (
 	github.com/go-openapi/spec v0.19.9 // indirect
 	github.com/go-openapi/strfmt v0.19.6 // indirect
 	github.com/go-openapi/validate v0.19.11 // indirect
+	github.com/go-playground/validator v9.31.0+incompatible
 	github.com/go-playground/validator/v10 v10.4.0
 	github.com/go-swagger/go-swagger v0.25.0 // indirect
 	github.com/gorilla/handlers v1.5.1 // indirect
