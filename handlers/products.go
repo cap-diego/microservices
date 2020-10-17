@@ -4,6 +4,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/cap-diego/microservices/data"
 	"log"
+	"fmt"
 	"strconv"
 	"net/http"
 	"context"
@@ -14,6 +15,7 @@ type Products struct {
 	l *log.Logger
 }
 
+// KeyProduct used for request.context 
 type KeyProduct struct{}
 
 // NewProducts rest resource for products
@@ -21,6 +23,7 @@ func NewProducts(l *log.Logger) *Products {
 	return &Products{l}
 }
 
+// GetProducts http handler of GET
 func (prods *Products) GetProducts(rw http.ResponseWriter, h *http.Request) {
 	lp := data.GetProducts()
 	err := lp.ToJSON(rw)
@@ -29,11 +32,13 @@ func (prods *Products) GetProducts(rw http.ResponseWriter, h *http.Request) {
 	}
 }
 
+// AddProduct http handler of post
 func (prods *Products) AddProduct(rw http.ResponseWriter, req *http.Request) {
 	newProd := req.Context().Value(KeyProduct{}).(data.Product)
 	data.AddProduct(&newProd)
 }
 
+// UpdateProducts http handler of put
 func (prods *Products) UpdateProducts(rw http.ResponseWriter, req *http.Request) {
 	requestVars := mux.Vars(req)
 	id, err := strconv.Atoi(requestVars["id"])
@@ -55,6 +60,7 @@ func (prods *Products) UpdateProducts(rw http.ResponseWriter, req *http.Request)
 	} 
 }
 
+//MiddlewareProductValidation Validate body of request and save product to context if valid
 func (prods Products) MiddlewareProductValidation(next http.Handler) http.Handler {
 	f := func(rw http.ResponseWriter, req *http.Request) {
 		prod := data.Product{}
@@ -63,6 +69,18 @@ func (prods Products) MiddlewareProductValidation(next http.Handler) http.Handle
 			prods.l.Println("[ERROR] desarializing product",err)
 			http.Error(rw, "Error reading product", http.StatusBadRequest)
 			return
+		}
+
+		// Validate products
+
+		err = prod.Validate()
+		if err != nil {
+			prods.l.Println("[ERROR] validating product", err)
+			http.Error(
+				rw, 
+				fmt.Sprintf("Error validating product: %s", err),
+				http.StatusBadRequest)
+			return			
 		}
 
 		// Add product to the context 
