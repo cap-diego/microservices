@@ -5,6 +5,11 @@ import (
 	"github.com/cap-diego/microservices/data"
 )
 
+// swagger:route GET /products products listProducts
+// Returns a list of products
+// responses:
+//	200: productsResponse
+
 // GetProducts http handler of GET
 func (prods *Products) GetProducts(rw http.ResponseWriter, h *http.Request) {
 	lp := data.GetProducts()
