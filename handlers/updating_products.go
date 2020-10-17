@@ -15,9 +15,9 @@ import (
 //  404: errorResponse
 //  422: errorValidation
 
-
 // UpdateProducts http handler of put
 func (prods *Products) UpdateProducts(rw http.ResponseWriter, req *http.Request) {
+	rw.Header().Add("Content-Type", "application/json")
 	requestVars := mux.Vars(req)
 	id, err := strconv.Atoi(requestVars["id"])
 	if err != nil {

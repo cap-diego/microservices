@@ -5,8 +5,8 @@ import (
 	"github.com/cap-diego/microservices/data"
 )
 
-//swager:route POST /products products createProduct
-//
+// swagger:route POST /products products createProduct
+// Create a new product
 // responses:
 //	200: productResponse
 //	422: errorValidation

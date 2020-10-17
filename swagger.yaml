@@ -1,7 +1,5 @@
 basePath: /
 consumes:
-- 'application/json '
-- 'Products:'
 - application/json
 definitions:
   GenericError:
@@ -65,8 +63,8 @@ definitions:
     type: object
     x-go-package: github.com/cap-diego/microservices/handlers
 info:
-  description: 'Documentation for Product API '
-  title: 'of Product API '
+  description: Documentation for Product API
+  title: of Product API
   version: 1.0.0
 paths:
   /products:
@@ -83,6 +81,27 @@ paths:
       responses:
         "200":
           $ref: '#/responses/productsResponse'
+      tags:
+      - products
+    post:
+      description: Create a new product
+      operationId: createProduct
+      parameters:
+      - description: |-
+          Product data structure to Update or Create.
+          Note: the id field is ignored by update and create operations
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/Product'
+      responses:
+        "200":
+          $ref: '#/responses/productResponse'
+        "422":
+          $ref: '#/responses/errorValidation'
+        "501":
+          $ref: '#/responses/errorResponse'
       tags:
       - products
     put:
@@ -111,7 +130,7 @@ paths:
       description: Deletes a product from the db
       operationId: deleteProduct
       parameters:
-      - description: The id of the product to delete from the database
+      - description: The id of the product for which the operation relates
         format: int64
         in: path
         name: id
@@ -131,19 +150,19 @@ paths:
       description: Return a list of products from the database
       operationId: listSingleProduct
       parameters:
-      - description: The id of the product to delete from the database
-        format: int64
-        in: path
-        name: id
-        required: true
-        type: integer
-        x-go-name: ID
       - description: |-
           Currency used when returning the price of the product,
           when not specified currency is returned in GBP.
         in: query
         name: Currency
         type: string
+      - description: The id of the product for which the operation relates
+        format: int64
+        in: path
+        name: id
+        required: true
+        type: integer
+        x-go-name: ID
       responses:
         "200":
           $ref: '#/responses/productResponse'

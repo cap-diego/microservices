@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-//Product defines the structure for an API
+// Product defines the structure for an API
 // swagger:model
 type Product struct {
 	// the id for the product
@@ -127,13 +127,13 @@ var productList = []*Product{
 		Name:        "Latte",
 		Description: "Frothy milky coffee",
 		Price:       2.45,
-		SKU:         "abc323",
+		SKU:         "hfg-dsd-fff",
 	},
 	&Product{
 		ID:          2,
 		Name:        "Esspresso",
 		Description: "Short and strong coffee without milk",
 		Price:       1.99,
-		SKU:         "fjd34",
+		SKU:         "fjd-hhh-aaa",
 	},
 }

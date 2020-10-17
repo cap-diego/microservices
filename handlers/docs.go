@@ -81,3 +81,11 @@ type errorValidationWrapper struct {
 	// in: body
 	Body ValidationError
 }
+
+// swagger:parameters listSingleProduct deleteProduct
+type productIDParamsWrapper struct {
+	// The id of the product for which the operation relates
+	// in: path
+	// required: true
+	ID int `json:"id"`
+}

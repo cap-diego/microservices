@@ -6,13 +6,12 @@ import (
 	"net/http"
 )
 
-
-
 // MiddlewareProductValidation Validate body of request and save product to context if valid
 func (prods *Products) MiddlewareProductValidation(next http.Handler) http.Handler {
 	f := func(rw http.ResponseWriter, req *http.Request) {
+		rw.Header().Add("Content-Type", "application/json")
 		prod := data.Product{}
-		err := data.FromJSON(prod, req.Body)
+		err := data.FromJSON(&prod, req.Body)
 		if err != nil {
 			prods.l.Println("[ERROR] desarializing product",err)
 			http.Error(rw, "Error reading product", http.StatusBadRequest)
@@ -33,7 +32,6 @@ func (prods *Products) MiddlewareProductValidation(next http.Handler) http.Handl
 		// Add product to the context 
 		ctx := context.WithValue(req.Context(), KeyProduct{}, prod)
 		req = req.WithContext(ctx)
-		prods.l.Printf("CONTEXTO %#v", ctx)
 		// Call the next handler 
 		next.ServeHTTP(rw, req)
 	}

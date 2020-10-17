@@ -1,17 +1,3 @@
-// Package classification of Product API 
-//
-// Documentation for Product API 
-//
-// Schemes: http
-// BasePath: /
-// Version: 1.0.0
-//
-// Consumes: 
-// - application/json 
-//
-// Products:
-// - application/json
-// swagger:meta
 package handlers
 
 import (
@@ -31,11 +17,6 @@ type Products struct {
 	l *log.Logger
 	v *data.Validation
 }
-
-// NewProducts rest resource for products
-// func NewProducts(l *log.Logger) *Products {
-// 	return &Products{l}
-// }
 
 // ErrInvalidProductPath is an error message when the product path is not valid
 var ErrInvalidProductPath = fmt.Errorf("Invalid Path, path should be /products/[id]")

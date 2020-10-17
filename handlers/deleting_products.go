@@ -16,6 +16,7 @@ import (
 
 //DeleteProduct handles DELETE requests and removes product from the db 
 func (p *Products) DeleteProduct(rw http.ResponseWriter, r *http.Request) {
+	rw.Header().Add("Content-Type", "application/json")
 	vars := mux.Vars(r)
 	id, _ := strconv.Atoi(vars["id"])
 
